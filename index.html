@@ -228,18 +228,20 @@
     <div class="card">
       <div class="card-header bg-dark">
         <div id="random-agent-controlled-diagram"></div>
-        <p class="card-title" id="simple-cleaning-robot">Robo de limpeza Aleatório</p>
+        <p class="card-title" id="simple-cleaning-robot">Robo de limpeza Aleatório com capacidade de carga</p>
       </div>
       <div class="card-body">
-        <h5>Movimento aleatório, sujeira aleatório.</h5>
+        <h5>Movimento aleatório, sujeira aleatório, capacidade de carga</h5>
         <p>
           Para deixar um bloco sujo, clique nele ou aguarde a sujeira aparecer em algum bloco.<br>
+          Toda sujeira tem um peso aleatório que varia de 1 a 3 unidades<br>
+          A capacidade do robo é de 10 unidades <br>
+          Ao atingir a capacidade máxima, o robo deve se descarregar no lixo azul <br>
           O robo limpará ao passar pelo bloco sujo.
           O robo se movimenta de forma aleatória
         </p>
         <div class="row shadow">
-          <div id="random-agent-controlled-diagram"">
-            <h2>Random Agent 4 Places</h2>
+          <div id="random-agent-controlled-diagram" class="col">
             <svg width=" 600" height="600"></svg>
           </div>
         </div>

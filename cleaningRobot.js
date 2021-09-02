@@ -5,12 +5,13 @@ class World {
         this.location = 0;
         this.floors = [];
         for (let i = 0; i < numFloors; i++) {
-            this.floors.push({ dirty: false });
+            this.floors.push({ dirty: false, nivel: 0 });
         }
     }
 
     markFloorDirty(floorNumber) {
         this.floors[floorNumber].dirty = true;
+        this.floors[floorNumber].nivel = 1 + (Math.floor(Math.random() * 10)%3);      
     }
 
     simulate(action) {
@@ -29,6 +30,9 @@ class World {
                 break;
             case 'RIGHT-DOWN':
                 this.location = 3;
+                break;
+            case 'ESVAZIAR':
+                this.location = 4;
                 break;
         }
 

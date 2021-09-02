@@ -1,10 +1,4 @@
-/* The general structure is to put the AI code in xyz.js and the visualization
-   code in c_xyz.js. Create a diagram object that contains all the information
-   needed to draw the diagram, including references to the environment&agents.
-   Then use a draw function to update the visualization to match the data in
-   the environment & agent objects. Use a separate function if possible for 
-   controlling the visualization (whether through interaction or animation). 
-   Chapter 2 has minimal AI and is mostly animations. */
+// constantes
 
 const SIZE = 100;
 const colors = {
@@ -15,7 +9,7 @@ const colors = {
 };
 
 
-/* Create a diagram object that includes the world (model) and the svg
+/* Criação do diagrama
    elements (view) */
 function makeDiagram(selector) {
     let diagram = {}, world = new World(4);
@@ -29,7 +23,7 @@ function makeDiagram(selector) {
     diagram.robot.append('rect')
         .attr('width', SIZE)
         .attr('height', SIZE)
-        .attr('fill', 'hsl(120,25%,50%)');
+        .attr('fill', 'hsl(120,100%, 50%)');
     diagram.perceptText = diagram.robot.append('text')
         .attr('x', SIZE/2)
         .attr('y', -25)
@@ -37,6 +31,10 @@ function makeDiagram(selector) {
     diagram.actionText = diagram.robot.append('text')
         .attr('x', SIZE/2)
         .attr('y', -10)
+        .attr('text-anchor', 'middle');
+    diagram.capacityText = diagram.robot.append('text')
+        .attr('x', SIZE/2)
+        .attr('y', 25)
         .attr('text-anchor', 'middle');
 
     diagram.floors = [];
@@ -73,19 +71,27 @@ function renderWorld(diagram) {
     diagram.robot.style('transform', `translate(${diagram.xPosition(diagram.world.location)-compensacao}px,${diagram.yPosition(diagram.world.location) -110}px)`);
 }
 
+// Texto representando o estado
 function renderAgentPercept(diagram, dirty) {
-    let perceptLabel = {false: "It's clean", true: "It's dirty"}[dirty];
+    let perceptLabel = {false: "Está Limpo", true: "Está Sujo"}[dirty];
     diagram.perceptText.text(perceptLabel);
 }
 
+function verificaCapacidade(diagram, qtd) {
+    let text = 'Carga atual '+qtd
+    diagram.capacityText.text(text);
+}
+
+// texto representando a ação tomada pelo agente
 function renderAgentAction(diagram, action) {
     let actionLabel = {
         null: 'Waiting', 
-        'SUCK': 'Vacuuming', 
-        'LEFT-UP': 'Going left up', 
-        'RIGHT-UP': 'Going right up',
-        'LEFT-DOWN': 'Going left down',
-        'RIGHT-DOWN': 'Going right down'
+        'SUCK': 'Aspirando', 
+        'LEFT-UP': 'Indo para Esquerda acima', 
+        'RIGHT-UP': 'Indo para Direita acima',
+        'LEFT-DOWN': 'Indo para Esquerda abaixo',
+        'RIGHT-DOWN': 'Indo para Direita abaixo',
+        'ESVAZIAR': 'Esvaziando depósito'
     }[action];
     diagram.actionText.text(actionLabel);
 }
@@ -115,55 +121,75 @@ function makeAgentControlledDiagram() {
 }
 
 
-/* Random Agent com 4 pisos*/
+function criar_lixo(diagram){
+    diagram.floors[4] =
+        diagram.root.append('rect')
+        .attr('class', 'lixo') // for css
+        .attr('x', 300)
+        .attr('y', 325)
+        .attr('width', SIZE)
+        .attr('height', SIZE/2)
+        .attr('fill', 'hsl(200,50%, 50%)')
+}
+
+/* Random Agent com 4 blocos*/
 
 function makeRandomAgentControlledDiagram() {
     let diagram = makeDiagram('#random-agent-controlled-diagram svg');
     const actions = ['LEFT-UP', 'LEFT-DOWN', 'RIGHT-UP', 'RIGHT-DOWN']
-
+    let capacity = 8;
+    criar_lixo(diagram)
+    // Geração de número aleatório, diferente do número anterior
     function gerar_numero(anterior){
         let atual = Math.floor(Math.random() * 10)%4
         if(atual != anterior) return atual;
         return gerar_numero(atual)
     }
-    function update() {
+
+    async function update() {
         let location = diagram.world.location;
         let percept = diagram.world.floors[location].dirty;
+        verificaCapacidade(diagram, capacity)
         renderAgentPercept(diagram, percept);
+
+        // Gerar ação aleatória
         let random = gerar_numero(location)
         let action = percept ? 'SUCK' : actions[random];
-        console.log('Piso ' + actions[location])
-        console.log('Estado ' + (percept ? 'SUJO' : 'LIMPO'))
-        console.log('Ação ' + action)
+
+        // verificar a quantidade de carga de sujeira
+        if(percept) {
+            if((capacity + diagram.world.floors[location].nivel) > 10){
+                diagram.robot.style('transform', 'translate(300px,220px)');
+                let atual = location
+                diagram.world.simulate("ESVAZIAR");
+                renderAgentAction(diagram, 'ESVAZIAR')                
+                setTimeout(()=>{
+                    diagram.world.simulate(actions[atual]);
+                    while (capacity > 0){
+                        diagram.capacityText.text('Descarregando ....');
+                        capacity -= 1;
+                    }
+                },2000);                
+            }          
+            capacity += diagram.world.floors[location].nivel;     
+        }
         diagram.world.simulate(action);
         renderWorld(diagram);
         renderAgentAction(diagram, action);        
     }
 
+    // Gerar sujeira aleatória
     function update_dirty(){
-        diagram.world.markFloorDirty(gerar_numero(diagram.world.location))
+        let random = gerar_numero(diagram.world.location)
+        diagram.world.markFloorDirty(random)
     }
 
     update();    
 
     setInterval(update, STEP_TIME_MS);
-    setInterval(update_dirty, STEP_TIME_MS + 2500);
-}
+    setInterval(update_dirty, STEP_TIME_MS + 3000);
+} 
 
-/* Control the diagram by letting the reader choose the action. This
-   diagram is tricky.
- 
-   1. If there's an animation already playing and the reader chooses
-      an action then *wait* for the animation to finish playing. While
-      waiting the reader may choose a different action. Replace the
-      previously chosen action with the new one. (An alternative
-      design would be to queue up all the actions.)
-   2. If there's not an animation already playing then when the reader
-      chooses an action then run it right away, without waiting.
-   3. Show the connection between the percept and the resulting action
-      by highlighting the percepts in the accompanying table, pausing,
-      and then highlighting the action.
-*/
 function makeReaderControlledDiagram() {
     let diagram = makeDiagram('#reader-controlled-diagram svg');
     let nextAction = 'LEFT-UP';

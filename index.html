@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Agentes Inteligentes</title>
+  <!-- <link rel="stylesheet" href="../styles.css"> -->
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <!-- <script type="text/javascript" src="../main.js"></script> -->
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body style="background-color: rgb(205, 163, 245);">
+  <div id="sidebar">
+    <div class="navbar-nav" id="myTab">
+      <a class="link ativo" href="#">Home</a>
+      <a class="link" href="#vacuum-cleaner-problem">Agente controlado</a>
+      <a class="link" href="#simple-cleaning-robot">Agente simples</a>
+      <a class="link" href="#rules-to-follow">Agente com tabela</a>
+      <a class="link" href="#random-agent-controlled-diagram">Agente aleatório</a>
+    </div>
+  </div>
+  <div class="header">
+    <div class="navbar navbar-dark bg-dark text-center" style="display: block">
+      <h1 class="font-weight-bold title">Trabalho GCC-128 - Inteligência Artificial</h1>
+    </div>
+    <div class="navbar navbar-dark bg-dark text-center">
+      <div class="row">
+        <div class="col">
+          <p class="font-weight-light" style="color: rgb(234, 172, 236); font-size: 1.2rem;">
+            Professor: AHMED ALI ABDALLA ESMIN
+          </p>
+        </div>
+        <div class="col">
+          <p class="font-weight-light" style=" text-decoration: none; color: rgb(234, 172, 236); font-size: 1.2rem;">
+            Aluno:
+            <a class="linkName" href="https://github.com/ThomazSIUFLA">Thomaz Flanklin de Souza Jorge</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="container" style="margin-left: 205px;">
+    <h2 class="text-lg-center">Implementação de Agentes Inteligentes</h2>
+
+    <div class="card">
+      <div class="card-header bg-dark">
+        <p class="card-title">Trabalho para a disciplina de Inteligência de software</p>
+      </div>
+      <div class="card-body">
+        <div class="conteudo">
+          <p>
+            Página desenvolvida por Thomaz Flanklin de Souza Jorge, como trabalho referente ao roteiro de estudos
+            orientados do primeiro semestre do ano de 2021.
+          </p>
+          <p>
+            Referente à disciplina GCC-128 - Inteligência Artificial - Sistemas de Informação
+          </p>
+
+        <h5>
+          Implementação de agentes seguindo o modelo disponível no <a href="http://aimacode.github.io/aima-javascript/2-Intelligent-Agents/" target="_blank">github</a></h5>
+          <h5>
+          Todo o conteúdo tem como referência o capítulo 2 do Livro "Inteligência Artificial", 3rd Edition Peter Norvig
+        </h5>
+        <img src="./livro.jpg" alt="livro intelig^^encia artificial">
+      </div>
+        <div class="row">
+          <div class="col shadow">
+            <p style="text-align: center; font-size: 2.0rem;">Controles</p>
+            <div class="buttons control-btn" style="position:relative;"></div>
+          </div>
+          <div id="reader-controlled-diagram" class="col">
+            <svg width="600" height="500"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="card-header bg-dark">
+        <p class="card-title" id="vacuum-cleaner-problem">Agente controlado</p>
+      </div>
+      <div class="card-body">
+        <h5>Controle o agente escolhendo a ação.</h5>
+        <p>
+          Para deixar um bloco sujo, clique nele. Movimente o robo clicando nos controles.
+        </p>
+        <div class="row">
+          <div class="col shadow">
+            <p style="text-align: center; font-size: 2.0rem;">Controles</p>
+            <div class="buttons control-btn" style="position:relative;"></div>
+          </div>
+          <div id="reader-controlled-diagram" class="col">
+            <svg width="600" height="500"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="card-header bg-dark">
+        <p class="card-title" id="simple-cleaning-robot">Robo de limpeza simples</p>
+      </div>
+      <div class="card-body">
+        <h5>Movimento automático repetido.</h5>
+        <p>
+          Para deixar um bloco sujo, clique nele. O robo limpará ao passar pelo bloco sujo.
+          O robo sempre movimenta no sentido horário
+        </p>
+        <div class="row shadow">
+          <div id="agent-controlled-diagram" class="col">
+            <svg width="600" height="500"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header bg-dark">
+        <p class="card-title" id="rules-to-follow">Robo com regras</p>
+      </div>
+      <div class="card-body">
+        <h5>Movimento automático repetido.</h5>
+        <p>
+          O robô seguirá as regras que você escolher. Clique em uma regra na tabela para alterá-la<br>
+          Clique em um bloco para deixá-lo sujo
+        </p>
+        <div class="row shadow">
+          <div id="table-controlled-diagram">
+            <table class="agent-actions">
+              <thead>
+                <tr>
+                  <th rowspan="2" valign="bottom">Estado</th>
+                  <th colspan="4">Posição</th>
+                </tr>
+                <tr>
+                  <th data-input="left-up">Esquerda acima</th>
+                  <th data-input="right-up">Direita acima</th>
+                  <th data-input="left-down">Esquerda abaixo</th>
+                  <th data-input="right-down">Direita abaixo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th data-input="clean">Limpo</th>
+                  <td data-action="left-up-clean">
+                    <select class="custom-select">
+                      <option value="LEFT-UP">ESQUERDA ACIMA</option>
+                      <option value="RIGHT-UP" selected>DIREITA ACIMA</option>
+                      <option value="LEFT-DOWN">ESQUERDA ABAIXO</option>
+                      <option value="RIGHT-DOWN">DIREITA ABAIXO</option>
+                      <option value="SUCK">ASPIRAR</option>
+                    </select>
+                  </td>
+                  <td data-action="right-up-clean">
+                    <select class="custom-select">
+                      <option value="LEFT-UP">ESQUERDA ACIMA</option>
+                      <option value="RIGHT-UP">DIREITA ACIMA</option>
+                      <option value="LEFT-DOWN">ESQUERDA ABAIXO</option>
+                      <option value="RIGHT-DOWN" selected>DIREITA ABAIXO</option>
+                      <option value="SUCK">ASPIRAR</option>
+                    </select>
+                  </td>
+                  <td data-action="left-down-clean">
+                    <select class="custom-select">
+                      <option value="LEFT-UP" selected>ESQUERDA ACIMA</option>
+                      <option value="RIGHT-UP">DIREITA ACIMA</option>
+                      <option value="LEFT-DOWN">ESQUERDA ABAIXO</option>
+                      <option value="RIGHT-DOWN">DIREITA ABAIXO</option>
+                      <option value="SUCK">ASPIRAR</option>
+                    </select>
+                  </td>
+                  <td data-action="right-down-clean">
+                    <select class="custom-select">
+                      <option value="LEFT-UP">ESQUERDA ACIMA</option>
+                      <option value="RIGHT-UP">DIREITA ACIMA</option>
+                      <option value="LEFT-DOWN" selected>ESQUERDA ABAIXO</option>
+                      <option value="RIGHT-DOWN">DIREITA ABAIXO</option>
+                      <option value="SUCK">ASPIRAR</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <th data-input="dirty">Sujo</th>
+                  <td data-action="left-up-dirty">
+                    <select class="custom-select">
+                      <option value="LEFT-UP">ESQUERDA ACIMA</option>
+                      <option value="RIGHT-UP">DIREITA ACIMA</option>
+                      <option value="LEFT-DOWN">ESQUERDA ABAIXO</option>
+                      <option value="RIGHT-DOWN">DIREITA ABAIXO</option>
+                      <option value="SUCK" selected>ASPIRAR</option>
+                    </select>
+                  </td>
+                  <td data-action="right-up-dirty">
+                    <select class="custom-select">
+                      <option value="LEFT-UP">ESQUERDA ACIMA</option>
+                      <option value="RIGHT-UP">DIREITA ACIMA</option>
+                      <option value="LEFT-DOWN">ESQUERDA ABAIXO</option>
+                      <option value="RIGHT-DOWN">DIREITA ABAIXO</option>
+                      <option value="SUCK" selected>ASPIRAR</option>
+                    </select>
+                  </td>
+                  <td data-action="left-down-dirty">
+                    <select class="custom-select">
+                      <option value="LEFT-UP">ESQUERDA ACIMA</option>
+                      <option value="RIGHT-UP">DIREITA ACIMA</option>
+                      <option value="LEFT-DOWN">ESQUERDA ABAIXO</option>
+                      <option value="RIGHT-DOWN">DIREITA ABAIXO</option>
+                      <option value="SUCK" selected>ASPIRAR</option>
+                    </select>
+                  </td>
+                  <td data-action="right-down-dirty">
+                    <select class="custom-select">
+                      <option value="LEFT-UP">ESQUERDA ACIMA</option>
+                      <option value="RIGHT-UP">DIREITA ACIMA</option>
+                      <option value="LEFT-DOWN">ESQUERDA ABAIXO</option>
+                      <option value="RIGHT-DOWN">DIREITA ABAIXO</option>
+                      <option value="SUCK" selected>ASPIRAR</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <svg width="600" height="600"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="card-header bg-dark">
+        <div id="random-agent-controlled-diagram"></div>
+        <p class="card-title" id="simple-cleaning-robot">Robo de limpeza Aleatório</p>
+      </div>
+      <div class="card-body">
+        <h5>Movimento aleatório, sujeira aleatório.</h5>
+        <p>
+          Para deixar um bloco sujo, clique nele ou aguarde a sujeira aparecer em algum bloco.<br>
+          O robo limpará ao passar pelo bloco sujo.
+          O robo se movimenta de forma aleatória
+        </p>
+        <div class="row shadow">
+          <div id="random-agent-controlled-diagram"">
+            <h2>Random Agent 4 Places</h2>
+            <svg width=" 600" height="600"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script type="text/javascript" src="./cleaningRobot.js"></script>
+  <script type="text/javascript" src="./c_cleaningRobot.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      $(function() {
+          $("#myTab > a").click(function() {
+              $(this).siblings().removeClass("ativo");
+              $(this).addClass("ativo");
+              localStorage.setItem("ultimo", $(this).attr("id"));
+          });
+
+          var ultimo = localStorage.getItem("ultimo");
+          if (ultimo)
+              $("#" + ultimo).click();
+      });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,125 @@
+.floor:hover {
+    cursor: pointer;
+  }
+
+  .agent-actions {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+  }
+
+  .agent-actions th {
+    padding: 0.5ex;
+    border: 1px solid hsl(240, 10%, 90%);
+    background: hsl(240, 10%, 85%);
+    text-align: center;
+  }
+
+  .agent-actions td {
+    padding: 0.25ex;
+    border: 1px solid hsl(240, 20%, 80%);
+    text-align: center;
+  }
+
+  .robot {
+    transition: transform 2.0s;
+  }
+
+  .floor {
+    fill: white;
+  }
+
+  .floor.clean {
+    fill: hsl(240, 10%, 90%);
+    transition: fill 2.0s;
+  }
+
+  .floor.dirty {
+    fill: hsl(0, 50%, 50%);
+    transition: fill 0.1s;
+  }
+
+  .btn {
+    border-radius: 10%;
+  }
+
+  .btn:hover {
+    cursor: pointer;
+    background-color: aquamarine;
+  }
+
+  .btn-vacuum {
+    border-radius: 50%;
+    background-color: aquamarine;
+  }
+
+  .btn-vacuum:hover {
+    cursor: pointer;
+    background-color: rgb(122, 102, 235);
+    color: white;
+  }
+
+  .title {
+      font-size: 3rem;
+      color: rgb(75, 243, 131);
+  }
+
+  a {
+      text-decoration: none;
+  }
+  .link {
+    text-decoration: none;
+    color: antiquewhite;
+    text-align: center;
+    padding: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 1.3rem;
+    border-bottom: 1px solid white;
+    border-bottom-right-radius: 20%;
+    border-top-right-radius: 20%;
+    margin-top: 5px;
+  }
+  .link:hover {
+      background-color: white;
+      color: blue;
+  }
+  .link.ativo {
+      background-color: rgb(0, 253, 63);
+      color: rgb(255, 0, 191);
+  }
+  .linkName:hover {
+      color: aqua;
+  }
+  .card-title {
+      color: rgb(114, 243, 135);
+      text-align: center;
+      font-size: 2rem;
+  }
+  .card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.conteudo {
+    padding: 10px;
+    margin: 10px;
+}
+
+#sidebar {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 200px;
+    height: 100%;
+    margin-left: 0px;
+    overflow-y: auto;
+    background: #063b55;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    padding-top: 180px;
+  }
+  
+  
